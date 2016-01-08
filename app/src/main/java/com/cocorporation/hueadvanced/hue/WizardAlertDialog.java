@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.cocorporation.hueadvanced.R;
@@ -16,18 +17,20 @@ import com.cocorporation.hueadvanced.R;
  *
  */
 
-public final class PHWizardAlertDialog {
+public final class WizardAlertDialog {
+
+    public static final String TAG_WIZARD_ALERT_DIALOG = "WizardAlertDialog";
 
     private ProgressDialog pdialog;
-    private static PHWizardAlertDialog dialogs;
+    private static WizardAlertDialog dialogs;
 
-    private PHWizardAlertDialog() {
+    private WizardAlertDialog() {
 
     }
 
-    public static synchronized PHWizardAlertDialog getInstance() {
+    public static synchronized WizardAlertDialog getInstance() {
         if (dialogs == null) {
-            dialogs = new PHWizardAlertDialog();
+            dialogs = new WizardAlertDialog();
         }
         return dialogs;
     }
@@ -67,10 +70,30 @@ public final class PHWizardAlertDialog {
      * @param ctx   Context
      */
     public void showProgressDialog(int resID, Context ctx) {
+        Log.w(TAG_WIZARD_ALERT_DIALOG, "showProgressDialog");
         String message = ctx.getString(resID);
         pdialog = ProgressDialog.show(ctx, null, message, true, true);
         pdialog.setCancelable(false);
 
+    }
+
+    public void showProgressDialogWithBar(int resID, Context ctx, int maxTime) {
+        Log.w(TAG_WIZARD_ALERT_DIALOG, "showProgressDialogWithBar");
+        String message = ctx.getString(resID);
+        pdialog = new ProgressDialog(ctx);
+        pdialog.setTitle(null);
+        pdialog.setMessage(message);
+        pdialog.setIndeterminate(false);
+        pdialog.setCancelable(false);
+        pdialog.setMax(maxTime);
+        pdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pdialog.setProgressNumberFormat(null);
+        pdialog.setProgressPercentFormat(null);
+        pdialog.show();
+    }
+
+    public void incrementProgressDialogWithBar(int increment) {
+        pdialog.incrementProgressBy(increment);
     }
 
     /**

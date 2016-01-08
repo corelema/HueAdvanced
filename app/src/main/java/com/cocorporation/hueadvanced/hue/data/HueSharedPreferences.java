@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.cocorporation.hueadvanced.shared.Util;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 
 public class HueSharedPreferences {
     private static final String HUE_SHARED_PREFERENCES_STORE = "HueSharedPrefs";
-    private static final String LAST_CONNECTED_USERNAME      = "LastConnectedUsername";
-    private static final String LAST_CONNECTED_IP            = "LastConnectedIP";
+    private static final String LAST_CONNECTED_USERNAME = "LastConnectedUsername";
+    private static final String LAST_CONNECTED_IP = "LastConnectedIP";
     private static HueSharedPreferences instance = null;
     private SharedPreferences mSharedPreferences = null;
 
@@ -52,13 +53,17 @@ public class HueSharedPreferences {
     }
 
     public PHAccessPoint retreiveAccessPoint() {
-        String lastIpAddress   = getLastConnectedIPAddress();
-        String lastUsername    = getUsername();
+        String lastIpAddress = getLastConnectedIPAddress();
+        String lastUsername = getUsername();
 
         PHAccessPoint accessPoint = new PHAccessPoint();
         accessPoint.setIpAddress(lastIpAddress);
         accessPoint.setUsername(lastUsername);
 
-        return accessPoint;
+        if (Util.isIPAddressValid(accessPoint.getIpAddress())) {
+            return accessPoint;
+        } else {
+            return null;
+        }
     }
 }

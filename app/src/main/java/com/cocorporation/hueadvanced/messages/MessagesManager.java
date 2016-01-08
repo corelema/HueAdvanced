@@ -54,7 +54,7 @@ public class MessagesManager {
         {
             for (MessageReceiver receiver : receiversForThisType)
             {
-                receiver.receiveMessage(message);
+                receiver.receiveMessage(messagesType, message);
             }
         }
     }
