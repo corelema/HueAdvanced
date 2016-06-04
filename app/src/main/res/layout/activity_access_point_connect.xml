@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".core.MainActivity">
+        tools:context=".core.MainActivity"> <!-- What is that?-->
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context=".core.MainActivity"
-            tools:showIn="@layout/app_bar_main">
+            tools:showIn="@layout/app_bar_main"> <!-- isn't needed, right?-->
 
             <ListView
                 android:id="@+id/bridge_list"
@@ -54,14 +54,14 @@
                 android:choiceMode="singleChoice"
                 android:dividerHeight="3sp"
                 android:focusable="true"
-                tools:listitem="@android:layout/simple_list_item_2"/>
+                tools:listitem="@android:layout/simple_list_item_2" />
 
             <TextView
                 android:id="@+id/select_bridge_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/bridge_list"
                 android:layout_marginTop="15dp"
                 android:paddingLeft="20dp"
@@ -77,8 +77,8 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/select_bridge_textView"
                 android:layout_marginBottom="40dip"
                 android:layout_marginLeft="10dip"

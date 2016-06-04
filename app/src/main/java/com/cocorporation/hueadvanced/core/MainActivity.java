@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.cocorporation.hueadvanced.R;
+import com.cocorporation.hueadvanced.core.lightgroup.LightGroupsActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -86,7 +87,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_quick_remote) {
 
         } else if (id == R.id.nav_light_details) {
-
+            Intent intent = new Intent(getApplicationContext(), LightGroupsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_connect_hub) {
             Intent intent = new Intent(getApplicationContext(), AccessPointConnectActivity.class);
             startActivity(intent);

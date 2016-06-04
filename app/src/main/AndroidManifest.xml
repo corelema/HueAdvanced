@@ -24,6 +24,10 @@
             android:name=".core.AccessPointConnectActivity"
             android:label="@string/title_activity_hub_connect"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".core.lightgroup.LightGroupsActivity"
+            android:label="@string/title_activity_light_groups"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

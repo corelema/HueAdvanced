@@ -22,10 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cocorporation.hueadvanced.R;
+import com.cocorporation.hueadvanced.core.lightgroup.LightGroupsActivity;
 import com.cocorporation.hueadvanced.hue.AccessPointListAdapter;
 import com.cocorporation.hueadvanced.hue.WizardAlertDialog;
 import com.cocorporation.hueadvanced.hue.data.HueSharedPreferences;
-import com.cocorporation.hueadvanced.shared.Util;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -40,7 +40,7 @@ import java.util.List;
 public class AccessPointConnectActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
-    public static final String TAG_PHSDK_LISTENER = "Listener";
+    public static final String TAG = "Listener";
 
     private AccessPointListAdapter adapter;
     private PHHueSDK phHueSDK;
@@ -195,7 +195,8 @@ public class AccessPointConnectActivity extends AppCompatActivity
         if (id == R.id.nav_quick_remote) {
 
         } else if (id == R.id.nav_light_details) {
-
+            Intent intent = new Intent(getApplicationContext(), LightGroupsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_connect_hub) {
 
         } else if (id == R.id.nav_settings) {
@@ -235,12 +236,12 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
-            Log.w(TAG_PHSDK_LISTENER, "onCacheUpdated");
+            Log.w(TAG, "onCacheUpdated");
         }
 
         @Override
         public void onBridgeConnected(PHBridge phBridge, String username) {
-            Log.w(TAG_PHSDK_LISTENER, "onBridgeConnected");
+            Log.w(TAG, "onBridgeConnected");
 
             phHueSDK.setSelectedBridge(phBridge);
             phHueSDK.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
@@ -262,7 +263,7 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
-            Log.w(TAG_PHSDK_LISTENER, "onAuthenticationRequired");
+            Log.w(TAG, "onAuthenticationRequired");
             phHueSDK.startPushlinkAuthentication(phAccessPoint);
             //pbar.setMax(MAX_TIME);
             authenticationStarted = true;
@@ -281,7 +282,7 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onAccessPointsFound(List<PHAccessPoint> accessPoints) {
-            Log.w(TAG_PHSDK_LISTENER, "onAccessPointsFound");
+            Log.w(TAG, "onAccessPointsFound");
             WizardAlertDialog.getInstance().closeProgressDialog();
             if (accessPoints != null && accessPoints.size() > 0) {
                 phHueSDK.getAccessPointsFound().clear();
@@ -298,7 +299,7 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onError(int code, final String message) {
-            Log.e(TAG_PHSDK_LISTENER, "on Error Called : " + code + ":" + message);
+            Log.e(TAG, "on Error Called : " + code + ":" + message);
 
             if (!authenticationStarted) {
                 handleErrorSearchPhase(code, message);
@@ -309,7 +310,7 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onConnectionResumed(PHBridge phBridge) {
-            Log.v(TAG_PHSDK_LISTENER, "onConnectionResumed" + phBridge.getResourceCache().getBridgeConfiguration().getIpAddress());
+            Log.v(TAG, "onConnectionResumed" + phBridge.getResourceCache().getBridgeConfiguration().getIpAddress());
             if (AccessPointConnectActivity.this.isFinishing())
                 return;
 
@@ -324,7 +325,7 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onConnectionLost(PHAccessPoint phAccessPoint) {
-            Log.v(TAG_PHSDK_LISTENER, "onConnectionLost : " + phAccessPoint.getIpAddress());
+            Log.v(TAG, "onConnectionLost : " + phAccessPoint.getIpAddress());
             if (!phHueSDK.getDisconnectedAccessPoint().contains(accessPoint)) {
                 phHueSDK.getDisconnectedAccessPoint().add(accessPoint);
             }
@@ -332,9 +333,9 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
         @Override
         public void onParsingErrors(List<PHHueParsingError> list) {
-            Log.w(TAG_PHSDK_LISTENER, "onParsingErrors");
+            Log.w(TAG, "onParsingErrors");
             for (PHHueParsingError parsingError : list) {
-                Log.e(TAG_PHSDK_LISTENER, "ParsingError : " + parsingError.getMessage());
+                Log.e(TAG, "ParsingError : " + parsingError.getMessage());
             }
         }
     };
@@ -369,12 +370,12 @@ public class AccessPointConnectActivity extends AppCompatActivity
 
     private void handleErrorSearchPhase(int code, final String message) {
         if (code == PHHueError.NO_CONNECTION) {
-            Log.w(TAG_PHSDK_LISTENER, "On No Connection");
+            Log.w(TAG, "On No Connection");
         } else if (code == PHHueError.AUTHENTICATION_FAILED || code == PHMessageType.PUSHLINK_AUTHENTICATION_FAILED) {
             WizardAlertDialog.getInstance().closeProgressDialog();
             WizardAlertDialog.getInstance().showErrorDialog(AccessPointConnectActivity.this, getApplicationContext().getString(R.string.authentication_failed_message), R.string.btn_ok);
         } else if (code == PHHueError.BRIDGE_NOT_RESPONDING) {
-            Log.w(TAG_PHSDK_LISTENER, "Bridge Not Responding . . . ");
+            Log.w(TAG, "Bridge Not Responding . . . ");
             WizardAlertDialog.getInstance().closeProgressDialog();
             AccessPointConnectActivity.this.runOnUiThread(new Runnable() {
                 @Override
