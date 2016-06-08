@@ -13,13 +13,12 @@ import android.widget.TextView;
 
 import com.cocorporation.hueadvanced.R;
 import com.cocorporation.hueadvanced.model.Light;
+import com.cocorporation.hueadvanced.events.LightsLoadedEvent;
 import com.cocorporation.hueadvanced.service.LightService;
-import com.cocorporation.hueadvanced.service.events.LightsLoadedEvent;
-import com.cocorporation.hueadvanced.service.events.LoadLightsEvent;
-import com.cocorporation.hueadvanced.service.events.TurnOnOffEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class LightGroupsListFragment extends Fragment {
     public static final String TAG = "LightGroupsListFragment";
 
     private EventBus bus;
-    private LightService lightService;
 
     private RecyclerView mLightsRecyclerView;
     private LightsAdapter mAdapter;
@@ -42,9 +40,6 @@ public class LightGroupsListFragment extends Fragment {
         mLightsRecyclerView = (RecyclerView) view.findViewById(R.id.light_list_recycler_view);
         mLightsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        lightService = new LightService(getBus());
-        getBus().register(lightService);
-
         return view;
     }
 
@@ -52,10 +47,11 @@ public class LightGroupsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getBus().register(this);
-        getBus().post(new LoadLightsEvent());
+
+        LightService.getLights(getBus());
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateUI(LightsLoadedEvent event) {
         Log.d(TAG, "updateUI");
         //LightManager lightManager = LightManager.get(getActivity());
@@ -101,8 +97,7 @@ public class LightGroupsListFragment extends Fragment {
         public void onClick(View v) {
             if (v == mOnOffSwitch) {
                 Switch sw = (Switch)v;
-                TurnOnOffEvent event = new TurnOnOffEvent(mLight.getLightId(), sw.isChecked());
-                bus.post(event);
+                LightService.turnOnOffLight(mLight.getLightId(), sw.isChecked());
 
                 /*
                 if (sw.isChecked()) {

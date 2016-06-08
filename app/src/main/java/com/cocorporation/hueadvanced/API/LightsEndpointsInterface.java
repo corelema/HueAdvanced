@@ -18,14 +18,11 @@ import rx.Observable;
  * Created by Corentin on 3/24/2016.
  */
 public interface LightsEndPointsInterface {
-    String SERVICE_ENDPOINT = "192.168.0.10";
+    String SERVICE_ENDPOINT = "http://192.168.0.100/api/26cd52782ddd2ddf2828f4283814d5ef/";
 
     @GET("lights")
-    Call<JsonObject> getLights();
-
-    @GET("lights")
-    Observable<JsonObject> getLightsReactive();
+    Observable<Response<ResponseBody>> getLights();
 
     @PUT("lights/{lightId}/state")
-    Call<ResponseBody> turnOnOffLight(@Path("lightId") Integer lightId, @Body JsonElement body);
+    Observable<ResponseBody> turnOnOffLight(@Path("lightId") Integer lightId, @Body JsonElement body);
 }

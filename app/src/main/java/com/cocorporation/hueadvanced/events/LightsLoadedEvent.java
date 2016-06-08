@@ -1,4 +1,4 @@
-package com.cocorporation.hueadvanced.service.events;
+package com.cocorporation.hueadvanced.events;
 
 import java.util.List;
 import com.cocorporation.hueadvanced.model.Light;
