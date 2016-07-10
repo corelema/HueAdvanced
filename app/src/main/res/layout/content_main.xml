@@ -16,4 +16,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Coucou!" />
+
+    <com.cocorporation.hueadvanced.customviews.Rainbow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingLeft="100dp"
+        android:paddingRight="100dp"
+        android:paddingTop="100dp"
+        app:multicolor="true"
+        app:selectedColor="@color/defaultLightColor"
+        app:arcStrokeWidth="40dp" />
 </RelativeLayout>
