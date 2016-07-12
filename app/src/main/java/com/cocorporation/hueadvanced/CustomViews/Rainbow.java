@@ -31,7 +31,7 @@ public class Rainbow extends View {
     private float mArcHeight = 0.0f;
     private float mArcStrokeWidth;
 
-    int[] rainbowColors;
+    int[] mRainbowColors;
 
     private Paint mArcPaint;
     private Paint mSelectedColorIndicatorPaint;
@@ -133,7 +133,7 @@ public class Rainbow extends View {
     }
 
     private void initRainbowColors() {
-        rainbowColors = new int[]{
+        mRainbowColors = new int[]{
                 Color.RED,
                 Color.rgb(255, 127, 0),
                 Color.YELLOW,
@@ -184,10 +184,6 @@ public class Rainbow extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        //Change height and width of draw rect to size of view
-        //mDrawRect is using to draw the wheel to the view's canvas,
-        //setting mDrawRect to the width and height of the view ensures
-        //the wheel is drawn correctly to the view
         mRect.set(getPaddingLeft(), getPaddingTop(), w - getPaddingRight(), getHeight() * 2 - getPaddingTop());
 
         mRainbowRadius = mRect.centerX() - mRect.left;
@@ -200,14 +196,13 @@ public class Rainbow extends View {
         mArcPaint.setColor(mSelectedColor);
         mArcPaint.setShader(null);
         canvas.drawArc(mRect, 180, 180, false, mArcPaint);
-        //mArcPaint.setColor(Color.RED); //do I need that?
 
         float center = getWidth()/2;
         float bottom = getHeight();
 
         //mArcPaint.setShader(new LinearGradient(getWidth(), 0, 0, 0, colors, null, Shader.TileMode.CLAMP));
 
-        SweepGradient sweepGradient = new SweepGradient(center, bottom, rainbowColors, new float[] {0.5f, 0.583f, 0.667f, 0.75f, 0.833f, 0.917f, 1f});
+        SweepGradient sweepGradient = new SweepGradient(center, bottom, mRainbowColors, new float[] {0.5f, 0.583f, 0.667f, 0.75f, 0.833f, 0.917f, 1f});
         mArcPaint.setShader(sweepGradient);
 
         canvas.drawArc(mRect, 170, 200, false, mArcPaint);
@@ -222,7 +217,7 @@ public class Rainbow extends View {
         Point selectedColorIndicatorCenter = Util.extendSegmentToDistance(x1, y1, x2, y2, distanceToSelectedColorIndicator);
 
         float angle = Util.angleBetweenSegments(x1, y1, selectedColorIndicatorCenter.x, selectedColorIndicatorCenter.y);
-        int selectedColorIndicatorColor = Util.colorFromAngle(angle);
+        int selectedColorIndicatorColor = Util.colorFromAngle(angle, mRainbowColors);
 
         mSelectedColorIndicatorPaint.setColor(selectedColorIndicatorColor);
         //For motion event debugging

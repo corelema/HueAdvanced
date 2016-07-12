@@ -47,42 +47,26 @@ public class Util {
         return angle;
     }
 
-    public static int colorFromAngle(float angle) {
-        float piBy6 = (float) Math.PI / 6;
-        int firstColor;
-        int secondColor;
-        float percentage;
+    public static int colorFromAngle(float angle, int[] colors) {
+        int numberOfColors = colors.length;
+        float piPart = (float) Math.PI / (numberOfColors - 1);
 
-        if (angle < piBy6) {
-            firstColor = Color.RED;
-            secondColor = Color.rgb(255, 127, 0);
-            percentage = percentageOfArc(0, piBy6, angle);
-        } else if (angle < 2 * piBy6) {
-            firstColor = Color.rgb(255, 127, 0);
-            secondColor = Color.YELLOW;
-            percentage = percentageOfArc(piBy6, 2 * piBy6, angle);
-        } else if (angle < 3 * piBy6) {
-            firstColor = Color.YELLOW;
-            secondColor = Color.GREEN;
-            percentage = percentageOfArc(2 * piBy6, 3 *piBy6, angle);
-        } else if (angle < 4 * piBy6) {
-            firstColor = Color.GREEN;
-            secondColor = Color.BLUE;
-            percentage = percentageOfArc(3 * piBy6, 4 *piBy6, angle);
-        } else if (angle < 5 * piBy6) {
-            firstColor = Color.BLUE;
-            secondColor = Color.rgb(75, 0, 130);
-            percentage = percentageOfArc(4 * piBy6, 5 *piBy6, angle);
-        } else {
-            firstColor = Color.rgb(75, 0, 130);
-            secondColor = Color.rgb(148, 0, 211);
-            percentage = percentageOfArc(5 * piBy6, 6 *piBy6, angle);
+        int indexOfFirstAngle = (int) (angle / piPart);
+        if (indexOfFirstAngle == numberOfColors - 1) {
+            return colors[numberOfColors - 1];
         }
 
-        float restOfPercentage = 1 - percentage;
-        int red = (int) (Color.red(firstColor) * restOfPercentage + Color.red(secondColor) * percentage);
-        int green = (int) (Color.green(firstColor) * restOfPercentage + Color.green(secondColor) * percentage);
-        int blue = (int) (Color.blue(firstColor) * restOfPercentage + Color.blue(secondColor) * percentage);
+        int firstColor = colors[indexOfFirstAngle];
+        int secondColor = colors[indexOfFirstAngle + 1];
+        float firstAngle = indexOfFirstAngle * piPart;
+        float secondAngle = (indexOfFirstAngle + 1) * piPart;
+
+        float percentageOfSecondColor = percentageOfArc(firstAngle, secondAngle, angle);
+        float percentageOfFirstColor = 1 - percentageOfSecondColor;
+
+        int red = (int) (Color.red(firstColor) * percentageOfFirstColor + Color.red(secondColor) * percentageOfSecondColor);
+        int green = (int) (Color.green(firstColor) * percentageOfFirstColor + Color.green(secondColor) * percentageOfSecondColor);
+        int blue = (int) (Color.blue(firstColor) * percentageOfFirstColor + Color.blue(secondColor) * percentageOfSecondColor);
 
         return Color.rgb(red, green, blue);
     }
